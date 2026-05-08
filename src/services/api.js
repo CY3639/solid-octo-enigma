@@ -1,6 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
 
-const API_BASE_URL = 'https"//lyrebird04.ifn666.com/a02/api';
+const API_BASE_URL = 'https://lyrebird04.ifn666.com/a02/api';
 
 // Core fetch wrapper for every service function to call
 // handles: auth headers, JSON parsing, error normalisation
@@ -9,7 +9,7 @@ async function request(endpoint, options = {}) {
     const token = await SecureStore.getItemAsync('jwt');
 
     const headers = {
-        'Content-Type': 'application.json',
+        'Content-Type': 'application/json',
         ...options.headers,
     };
 
@@ -32,10 +32,11 @@ async function request(endpoint, options = {}) {
 
         if (!response.ok) {
             const error = new Error(data?.message || `Request failed: ${response.status}`);
+            error.status = response.status;
+            error.data = data;
+            throw error;
         }
-        error.status = response.status;
-        error.data = data;
-        throw error;
+
 
         const linkHeader = response.headers.get('Link');
 
