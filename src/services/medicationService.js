@@ -13,7 +13,11 @@ function parseLinkHeader(header) {
 export const medicationService = {
   getAll: async (page = 1, search = '') => {
     let endpoint = `/medications?page=${page}`;
-    if (search) endpoint += `&search=${encodeURIComponent(search)}`;
+    if (search) {
+      endpoint = `/medications/search?medicationName=${encodeURIComponent(search)}`;
+    } else {
+      endpoint = `/medications?page=${page}`;
+    }
     const { data, linkHeader } = await api.get(endpoint);
     return { medications: data, links: parseLinkHeader(linkHeader) };
   },

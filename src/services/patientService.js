@@ -17,7 +17,7 @@ function parseLinkHeader(header) {
 export const patientService = {
   getAll: async (page = 1, search = '') => {
     let endpoint = `/patients?page=${page}`;
-    if (search) endpoint += `&search=${encodeURIComponent(search)}`;
+    if (search) endpoint += `&name=${encodeURIComponent(search)}`;
     const { data, linkHeader } = await api.get(endpoint);
     return { patients: data, links: parseLinkHeader(linkHeader) };
   },
