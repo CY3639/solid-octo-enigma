@@ -60,7 +60,7 @@ export default function PatientsScreen({ navigation }) {
     >
       <Card.Title
         title={`${item.firstName} ${item.lastName}`}
-        subtitle={`DOB: ${new Date(item.dateOfBirth).toLocaleDateString()}`}
+        subtitle={`Address: ${item.address}`}
       />
     </Card>
   );
@@ -111,7 +111,8 @@ export default function PatientsScreen({ navigation }) {
           style={styles.fab}
           onPress={() => {
             // Open a modal or navigate to a create patient screen
-            // We'll add this in Step 5.3 with PatientForm component
+            console.log('Navigating with id:', item._id);
+            navigation.navigate('PatientDetail', { id: item._id, name: `${item.firstName} ${item.lastName}` });
           }}
         />
       )}
