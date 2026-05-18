@@ -146,13 +146,14 @@ export default function MedicationsScreen() {
   useFocusEffect(
     useCallback(() => {
       setLoading(true);
-      fetchMedications(page);
+      fetchMedications(page, search);
     }, [page])
   );
 
   const handleSearch = (text) => {
     setSearch(text);
     setPage(1); // reset to page 1 on new search
+    fetchMedications(1, text);
   };
 
   const handleRefresh = () => {
