@@ -4,6 +4,7 @@ import { Searchbar, FAB, Card, Text, ActivityIndicator, Snackbar } from 'react-n
 import { useFocusEffect } from '@react-navigation/native';
 import { patientService } from '../services/patientService';
 import { useAuth } from '../context/AuthContext';
+import PatientFormModal from '../components/PatientFormModal';
 
 export default function PatientsScreen({ navigation }) {
   const { isPharmacist } = useAuth();
@@ -14,6 +15,7 @@ export default function PatientsScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState('');
+  const [addModalVisible, setAddModalVisible] = useState(false);
 
   const fetchPatients = useCallback(async (pageNum = 1, searchQuery = search) => {
     try {
@@ -73,6 +75,12 @@ export default function PatientsScreen({ navigation }) {
     );
   }
 
+  const handleCreatePatient = async (formData) => {
+    await patientService.create(formData);
+    fetchPatients(1, search);
+    setPage(1);
+  };
+
   return (
     <View style={styles.container}>
       <Searchbar
@@ -105,6 +113,12 @@ export default function PatientsScreen({ navigation }) {
         )}
       </View>
 
+      <PatientFormModal
+        visible={addModalVisible}
+        onDismiss={() => setAddModalVisible(false)}
+        onSave={handleCreatePatient}
+      />
+
       {isPharmacist && (
         <FAB
           icon="plus"
@@ -130,5 +144,5 @@ const styles = StyleSheet.create({
   error: { textAlign: 'center', color: 'red', margin: 12 },
   pagination: { flexDirection: 'row', justifyContent: 'space-between', padding: 12 },
   pageLink: { color: '#2196F3', fontSize: 16, fontWeight: '600' },
-  fab: { position: 'absolute', right: 16, bottom: 16 },
+  fab: { position: 'absolute', margin: 16, right: 0, bottom: 0 },
 });

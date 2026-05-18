@@ -5,6 +5,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { patientService } from '../services/patientService';
 import { medicationProfileService } from '../services/medicationProfileService';
 import { useAuth } from '../context/AuthContext';
+import PatientFormModal from '../components/PatientFormModal';
 
 export default function PatientDetailScreen({ route, navigation }) {
   const { id } = route.params;
@@ -14,6 +15,7 @@ export default function PatientDetailScreen({ route, navigation }) {
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [editModalVisible, setEditModalVisible] = useState(false);
 
   const fetchData = useCallback(async () => {
     try {
@@ -36,6 +38,11 @@ export default function PatientDetailScreen({ route, navigation }) {
       fetchData();
     }, [fetchData])
   );
+
+  const handleUpdatePatient = async (formData) => {
+    await patientService.update(id. formData);
+    fetchData();
+  };
 
   const handleDeletePatient = () => {
     Alert.alert(
@@ -100,17 +107,22 @@ export default function PatientDetailScreen({ route, navigation }) {
       <Card style={styles.card}>
         <Card.Title title={`${patient.firstName} ${patient.lastName}`} />
         <Card.Content>
-          <Text>Date of Birth: {new Date(patient.dateOfBirth).toLocaleDateString()}</Text>
-          <Text>Gender: {patient.gender}</Text>
           {patient.address && <Text>Address: {patient.address}</Text>}
         </Card.Content>
         {isPharmacist && (
           <Card.Actions>
-            <Button onPress={() => {/* Open edit modal/screen */}}>Edit</Button>
+            <Button onPress={() => setEditModalVisible(true)}>Edit</Button>
             <Button textColor="red" onPress={handleDeletePatient}>Delete</Button>
           </Card.Actions>
         )}
       </Card>
+
+      <PatientFormModal
+        visible={editModalVisible}
+        onDismiss={() => setEditModalVisible(false)}
+        onSave={handleUpdatePatient}
+        initial={patient}
+      />
 
       {/* Medication Profiles */}
       <Text variant="titleMedium" style={styles.sectionTitle}>Medication Profiles</Text>
