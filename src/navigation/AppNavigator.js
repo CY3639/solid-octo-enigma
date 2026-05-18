@@ -4,13 +4,13 @@ import { ActivityIndicator, View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useAuth } from '../context/AuthContext';
 
-// screens: placeholder files for now
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import PatientsScreen from '../screens/PatientsScreen';
 import PatientDetailScreen from '../screens/PatientDetailScreen';
 import MedicationsScreen from '../screens/MedicationsScreen';
 import AdminApprovalScreen from '../screens/AdminApprovalScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -74,6 +74,11 @@ function MainTabs() {
           options={{ tabBarLabel: 'Approvals', headerShown: true, title: 'Approvals' }}
         />
       )}
+      <Tab.Screen
+        name="SettingsTab"
+        component={SettingsScreen}
+        options={{ tabBarLabel: 'Settings', headerShown: true, title: 'Settings' }}
+      />
     </Tab.Navigator>
   );
 }
